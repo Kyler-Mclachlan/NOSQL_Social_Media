@@ -1,18 +1,23 @@
 const { Schema, model, Types } = require('mongoose');
 
 
-const User = new Schema(
+const Thought = new Schema(
     {
-      username: {
+      thoughtText: {
         type: String,
-        unique: true,
-        trim: true,
+        min: [1, 'Too few characters for a full thoguht'],
+        max: [280, 'Too many Characters'],
         required: 'Please enter a username! D:'
       },
       email: {
         type: String,
         unique: true,
         match: [/.+@.+\..+/, 'Please enter a valid e-mail address D:']
+      },
+      createdAt: {
+        type: Date,
+        default: Date.now,
+        get: createdAtVal => dateFormat(createdAtVal)
       },
       friends: [        {
         type: Schema.Types.ObjectId,
