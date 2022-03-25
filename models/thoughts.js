@@ -1,7 +1,32 @@
 const { Schema, model, Types } = require('mongoose');
 
+const reationSchema = new Schema({
+    reactionId:{
+        type: Schema.Types.ObjectId,
+        default: () => new Types.ObjectId()
+    },
+    reactionBody: {
+        type: String,
+        required: true
+    },
+    username:{
+        type: String,
+        required: "Who's reaction is this!"
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+        get: createdAtVal => dateFormat(createdAtVal)
+    }
+    },
+    {
+    toJSON: {
+        getters: true
+        }
+    }
+);
 
-const Thought = new Schema(
+const ThoughtSchema = new Schema(
     {
       thoughtText: {
         type: String,
@@ -19,16 +44,11 @@ const Thought = new Schema(
         default: Date.now,
         get: createdAtVal => dateFormat(createdAtVal)
       },
-      friends: [        {
+      username: [        {
         type: Schema.Types.ObjectId,
         ref: 'User'
       }],
-      thoughts: [
-        {
-          type: Schema.Types.ObjectId,
-          ref: 'Thought'
-        }
-      ]
+      reactions : [reationSchema]
     },
     {
       toJSON: {
@@ -40,10 +60,13 @@ const Thought = new Schema(
     }
   );
 
+
+
 // get total count of friends = not sure if this will work
-User.virtual('friendCount').get(function() {
-    return this.friends.reduce(
-      (total, friends) => total + friends.length + 1,
-      0
-    );
+ThoughtSchema.virtual('reactionCount').get(function() {
+    return this.reactions.length;
   });
+
+const Thought = model('Comment', ThoughtSchema);
+
+module.exports = Thought;
