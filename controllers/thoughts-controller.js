@@ -12,6 +12,15 @@ const thoughtController = {
         res.sendStatus(400);
       });
   },
+  getThoughtsById({ params }, res) {
+    Thought.findOne({ _id: params.id })
+      .select('-__v')
+      .then(dbUserData => res.json(dbUserData))
+      .catch(err => {
+        console.log(err);
+        res.sendStatus(400);
+      });
+  },
   addThought({ params, body }, res) {
     console.log(params);
     Thought.create(body)
