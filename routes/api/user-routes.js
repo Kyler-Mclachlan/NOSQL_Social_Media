@@ -17,14 +17,15 @@ router
 
 // /api/pizzas/:id
 router
-  .route('/:userId')
+  .route('/:id')
   .get(getUserById)
   .put(updateUser)
   .delete(deleteUser);
 
 router
-.route('/:userId/friends/:friendId')
+.route('/:id/friends/:id')
   .put(addFriend)
   .delete(removeFriend);
+
 module.exports = router;
 
